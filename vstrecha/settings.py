@@ -1,11 +1,12 @@
+import os
 from pathlib import Path
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-o$e1q2dt1g9b*yo@c@ix_&&*_jqr9)$a3y&r8c)^)nc!chb366'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'just_random_string')
 
-DEBUG = True
+DEBUG = os.environ.get('DEBUG') == 'True'
 
 ALLOWED_HOSTS = []
 
@@ -52,8 +53,17 @@ WSGI_APPLICATION = 'vstrecha.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get("DB_NAME", "vstrecha"),
+        'USER': os.environ.get('DB_USER', 'vstrecha'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'vstrecha'),
+        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
+        'CONN_HEALTH_CHECKS': True,
+        'CONN_MAX_AGE': None,
+        "OPTIONS": {
+            "server_side_binding": True,
+        }
     }
 }
 
@@ -73,7 +83,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 USE_TZ = True
 
